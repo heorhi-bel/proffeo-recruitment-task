@@ -1,99 +1,169 @@
-# Zadanie Rekrutacyjne – Etap 1
+# Angular proffeo-recruitment-task
 
-### Nie oczekujemy gotowego produktu - zrób tyle ile będziesz w stanie zrobić. Otrzymanie zadania oznacza start zadania i od niego liczone jest do 8h. (Zadanie w najprostszym wariancie powinno zająć około 3-4 godziny)
+Nowoczesna aplikacja Angular 20 do przeglądania i zarządzania postami blogowymi z możliwością dodawania ich do ulubionych.
 
-### Dla jasności - żaden fragment zadania nie zostanie wykorzystany komercyjnie, jest to zadanie czysto rekrutacyjne.
+✨ **Funkcjonalności**
 
-## Cel
-
-Twoim zadaniem jest przygotowanie mini-aplikacji w Angular 20 z wykorzystaniem nowoczesnych funkcjonalności frameworka.
-
-Aplikacja powinna korzystać z publicznego API [jsonplaceholder.typicode.com](https://jsonplaceholder.typicode.com), prezentować listę postów wraz z możliwością ich filtrowania, przeglądania szczegółów oraz dodawania do ulubionych.  
-Projekt ma być responsywny i działać zarówno na desktopie, jak i na urządzeniach mobilnych.
-
----
-
-## Zasady realizacji
-- Zadanie należy umieścić w publicznym repozytorium GitHub, aby był wgląd w historię commitów.  
-- **Nazwa repozytorium:** imię i nazwisko kandydata.  
-- **Czas na wykonanie:** do 8 godzin.  
-- **Commity:** częste i opisowe.  
-- Kod powinien być zgodny z dobrymi praktykami (DRY, SOLID, czystość architektury).
-- Użycie AI dopuszczalne jako wsparcie w zakresie planowania, testów i dokumentacji. 
+* **Lista postów**: przeglądanie wszystkich postów z filtrowaniem
+* **Szczegóły posta**: podgląd pełnej treści posta z informacją o autorze i komentarzach
+* **System ulubionych**: dodawanie/usuwanie postów z listy ulubionych
+* **Zaawansowane filtrowanie**: wyszukiwanie po tekście, filtrowanie po użytkowniku, widok tylko ulubionych
+* **Responsywny design**: podejście mobile-first z TailwindCSS v4
+* **Płynne animacje**: animacje wejścia/wyjścia dla lepszego UX
+* **Nowoczesna architektura**: standalone components, signals, zoneless change detection
 
 ---
 
-## Wymagania techniczne
+🚀 **Stos technologiczny**
 
-- **Framework:** Angular 20  
-- **Komponenty:** standalone components  
-- **Stan:** signals  
-- **Change detection:** zoneless (`provideZonelessChangeDetection()`)  
-- **Style:** TailwindCSS v4 (theme, zmienne, flexbox)  
-- **Architektura:** lazy loading modułów/feature’ów  
-- **Stan aplikacji:** signals + prosty singleton service trzymający dane w pamięci (cache)  
-- **Animacje:** co najmniej jedna w nowej składni `animate.enter` / `animate.leave`  
-- **Asynchroniczność:** RxJS + HttpClient  
-- **Loader:** prosty spinner lub skeleton  
-- **Responsywność:** poprawne wyświetlanie na desktopie i mobile  
-- **Struktura katalogów:** przejrzysta i uporządkowana (np. `features/`, `shared/`, `core/`, `services/`)  
+* Angular 20 z standalone components
+* Signals do reaktywnego zarządzania stanem
+* Zoneless Change Detection dla optymalnej wydajności
+* TailwindCSS v4 do stylizacji
+* Angular Animations z nowym API (`@angular/animations`)
+* RxJS do operacji HTTP
+* TypeScript w trybie strict
 
 ---
 
-## Plan przed implementacją
-Przed rozpoczęciem pracy należy przygotować w pliku `.md` (oczekujemy użycia AI do planowania i dokumentacji):
-- strukturę katalogów,  
-- listę komponentów,  
-- serwisy,  
-- podejście do zarządzania stanem.
+📦 **Instalacja**
+
+```bash
+# Klonowanie repozytorium
+git clone <repository-url>
+cd angular-posts-app
+
+# Instalacja zależności
+npm install
+
+# Start serwera developerskiego
+ng serve
+```
+
+Aplikacja dostępna pod adresem: `http://localhost:4200`
 
 ---
 
-## Funkcjonalności
+🏗️ **Architektura**
 
-### 1. Lista postów
-- Pobranie listy z API:  
-  `https://jsonplaceholder.typicode.com/posts`  
-- Wyświetlenie listy tytułów i fragmentów treści.  
+**Struktura katalogów**
 
-### 2. Szczegóły posta
-Po kliknięciu w post załaduj i wyświetl:  
-- pełną treść posta,  
-- dane autora (`/users/:id`),  
-- komentarze (`/posts/:id/comments`).  
+```
+src/app/
+├── core/                    # Serwisy i konfiguracja
+│   ├── services/            # Serwisy API i cache
+│   └── interceptors/        # Interceptory HTTP
+├── shared/                  # Komponenty wielokrotnego użytku
+│   └── components/          # Loader, skeleton, przycisk ulubionych
+├── features/                # Moduły funkcjonalne
+│   ├── posts/               # Funkcjonalności postów
+│   │   ├── components/      # Komponenty związane z postami
+│   │   └── services/        # Zarządzanie stanem postów
+│   └── favorites/           # Funkcjonalności ulubionych
+└── styles/                  # Style globalne
+```
 
-### 3. Filtrowanie
-- **Po treści posta** – filtracja po stronie frontendu.  
-- **Po użytkowniku** – filtrowanie przez query param:  
-  `https://jsonplaceholder.typicode.com/posts?userId=1`  
-- **Tylko ulubione** – filtrowanie postów oznaczonych jako ulubione (stan w singletonie).  
+**Kluczowe serwisy**
 
-### 4. Ulubione
-- Możliwość oznaczania posta jako ulubiony (toggle).  
-- Lista ulubionych przechowywana w singletonie (stan w serwisie).  
+* `ApiService` – klient HTTP dla JSONPlaceholder API
+* `CacheService` – cache w pamięci + obsługa stanów ładowania
+* `PostsStateService` – zarządzanie stanem postów przy użyciu signals
+* `FavoritesService` – zarządzanie ulubionymi
 
-### 5. Singleton (cache)
-Dane postów muszą być przechowywane w singleton service (signal store).  
-Dzięki temu posty nie są pobierane ponownie przy każdym wejściu.  
+**Główne komponenty**
 
-Ponowne zapytania do API wykonujemy tylko w przypadku:  
-- zmiany filtrów,  
-- odświeżenia strony.  
-
----
-
-## Bonus (dodatkowe punkty)
-- Dodaj zakładkę z widokiem Gantta, w którym pokażesz posty z zamockowanymi datami start–end (API ich nie zwraca).  
-- Dane mogą być zapisane w modelach TypeScript.  
-- Wyświetlenie w formie prostego timeline (tablica Gantt).  
+* `PostListComponent` – lista postów z filtrami
+* `PostCardComponent` – podgląd pojedynczego posta
+* `PostDetailComponent` – widok posta z komentarzami
+* `PostFiltersComponent` – kontrolki wyszukiwania i filtrowania
+* `FavoritesListComponent` – lista ulubionych
 
 ---
 
-## Podsumowanie
-Aplikacja powinna:  
-- pobierać i wyświetlać posty,  
-- umożliwiać filtrowanie,  
-- prezentować szczegóły posta,  
-- obsługiwać ulubione,  
-- być responsywna i nowoczesna,  
-- korzystać z najnowszych funkcjonalności Angulara 20.  
+🎯 **Zarządzanie stanem** (signals)
+
+* Reaktywne aktualizacje interfejsu
+* `computed signals` do stanu pochodnego
+* Cache w pamięci w singleton service
+* Skeletony i spinnery przy ładowaniu
+
+---
+
+🔧 **Integracja z API** (JSONPlaceholder)
+
+* `GET /posts` – lista postów
+* `GET /posts/:id` – szczegóły posta
+* `GET /users/:id` – dane autora
+* `GET /posts/:id/comments` – komentarze
+
+---
+
+🎨 **UI/UX**
+
+* Design responsywny (mobile-first)
+* Skeletony i spinnery podczas ładowania
+* Animacje `enter/leave`
+* Hover effects, feedback przy kliknięciu
+* Empty states z komunikatami
+* Dostępność: ARIA, semantyczny HTML
+
+---
+
+🔍 **Filtrowanie**
+
+* Wyszukiwanie tekstowe (tytuł + treść)
+* Filtrowanie po użytkowniku (`?userId=...`)
+* Widok tylko ulubionych
+* Filtrowanie w czasie rzeczywistym
+
+---
+
+💾 **Strategia cache**
+
+* Posty i użytkownicy przechowywani w singleton service
+* API wywoływane tylko przy zmianie filtrów lub odświeżeniu
+* Ulubione w pamięci w trakcie sesji
+
+---
+
+🚦 **Optymalizacje**
+
+* Zoneless Change Detection
+* Lazy loading feature modules
+* Signals + computed dla stanu pochodnego
+* Minimalne re-renderowanie komponentów
+
+---
+
+🎭 **Animacje**
+Przykład użycia nowego API:
+
+```typescript
+import { animate, style, transition, trigger } from '@angular/animations';
+
+export const fadeInScale = trigger('fadeInScale', [
+  transition(':enter', [
+    style({ opacity: 0, transform: 'scale(0.95)' }),
+    animate('300ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+  ]),
+  transition(':leave', [
+    animate('200ms ease-in', style({ opacity: 0, transform: 'scale(0.95)' }))
+  ])
+]);
+```
+
+---
+
+📱 **Wsparcie przeglądarek**
+
+* Chrome 90+
+* Firefox 88+
+* Safari 14+
+* Edge 90+
+
+---
+
+📄 **Licencja**
+Projekt objęty licencją MIT.
+
+---
